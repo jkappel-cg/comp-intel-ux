@@ -1,9 +1,9 @@
 (function(){
   // ===== TICKER (with illustrative stock pricing for publicly traded names) =====
   var tickerItems = [
-    { label: 'AUTOTRADER — NEW DEALER SOURCING FLOW' },
-    { label: 'CARS.COM — CONVERSATIONAL SHOPPING SIGNAL', ticker:'CARS', price:'18.42', dir:'up', chg:'0.6%' },
-    { label: 'CARMAX — AI PRICING INVESTMENT', ticker:'KMX', price:'78.90', dir:'down', chg:'0.3%' }
+    { label: 'AutoTrader — New dealer sourcing flow', topic: 'AutoTrader is moving deeper into dealer sourcing' },
+    { label: 'Cars.com — Conversational shopping signal', ticker:'CARS', price:'18.42', dir:'up', chg:'0.6%', topic: 'A more conversational way to find the next car' },
+    { label: 'CarMax — AI pricing investment', ticker:'KMX', price:'78.90', dir:'down', chg:'0.3%', topic: 'The next pricing advantage might be under the hood' }
   ];
   var track = document.getElementById('tickerTrack');
   if(track){
@@ -12,10 +12,14 @@
       tickerItems.forEach(function(item){
         var parts = item.label.split(' — ');
         var px = item.ticker ? ' <span class="px '+(item.dir==='up'?'px-up':'px-down')+'">('+item.ticker+') $'+item.price+' '+(item.dir==='up'?'▲':'▼')+item.chg+'</span>' : '';
-        html += '<span><b>'+parts[0]+'</b>'+px+' — '+parts[1]+'</span>';
+        html += '<span data-topic="'+item.topic+'"><b>'+parts[0]+'</b>'+px+' — '+parts[1]+'</span>';
       });
     }
     track.innerHTML = html;
+    track.addEventListener('click', function(e){
+      var t = e.target.closest('[data-topic]');
+      if(t) askAboutTopic(t.getAttribute('data-topic'));
+    });
   }
 
   // ===== STORY MODAL DATA =====
@@ -23,9 +27,8 @@
   // across sources), 'unvalidated' (tip-line-level, unconfirmed).
   var stories = {
     'autotrader-sourcing': {
-      sources: 4,
-      tag: 'AUTOTRADER / DEALER SOURCING',
-      eyebrow: 'HIGH CONFIDENCE · AUTOTRADER / DEALER SOURCING',
+      tag: 'AutoTrader / Dealer sourcing',
+      eyebrow: 'High confidence · AutoTrader / Dealer sourcing',
       title: 'AutoTrader is moving deeper into dealer sourcing.',
       body: 'New product surfaces suggest a broader push beyond marketplace discovery and into acquisition workflows.',
       then: 'Dealer tools centered on listing inventory and generating marketplace leads.',
@@ -42,7 +45,9 @@
       },
       evidence: [
         { icon:'💼', type:'Job posting', title:'AutoTrader Careers — Dealer Acquisition roles', date:'Oct 2, 2026', url:'https://www.autotrader.com/careers' },
-        { icon:'🖥️', type:'Competitor site', title:'AutoTrader.com — Dealer Solutions', date:'Oct 6, 2026', url:'https://www.autotrader.com' }
+        { icon:'🖥️', type:'Competitor site', title:'AutoTrader.com — Dealer Solutions', date:'Oct 6, 2026', url:'https://www.autotrader.com' },
+        { icon:'📰', type:'Press & news', title:'Dealer trade press — AutoTrader acquisition push', date:'Oct 4, 2026', url:'https://www.autotrader.com' },
+        { icon:'💬', type:'Dealer forum', title:'DealerRefresh thread — AutoTrader sourcing changes', date:'Oct 1, 2026', url:'https://www.autotrader.com' }
       ],
       followups: [
         'What would it take for CarGurus to compete on dealer sourcing?',
@@ -51,9 +56,8 @@
       ]
     },
     'carscom-conversational': {
-      sources: 3,
-      tag: 'CARS.COM / CONSUMER EXPERIENCE',
-      eyebrow: 'MEDIUM CONFIDENCE · CARS.COM / CONSUMER EXPERIENCE',
+      tag: 'Cars.com / Consumer experience',
+      eyebrow: 'Medium confidence · Cars.com / Consumer experience',
       title: 'A more conversational way to find the next car.',
       body: 'New shopping language points to a more guided, intent-led consumer journey.',
       then: 'Search began with make, model, and structured filters.',
@@ -69,7 +73,9 @@
         ]
       },
       evidence: [
-        { icon:'📰', type:'Product language', title:'Cars.com — guided-discovery beta copy', date:'Oct 5, 2026', url:'https://www.cars.com' }
+        { icon:'📰', type:'Product language', title:'Cars.com — guided-discovery beta copy', date:'Oct 5, 2026', url:'https://www.cars.com' },
+        { icon:'🖥️', type:'Competitor site', title:'Cars.com — search UI observation', date:'Oct 4, 2026', url:'https://www.cars.com' },
+        { icon:'💬', type:'Dealer forum', title:'Car Dealership Guy thread — Cars.com search test', date:'Oct 2, 2026', url:'https://www.cars.com' }
       ],
       followups: [
         'How does this compare to CarGurus’ current search?',
@@ -78,9 +84,8 @@
       ]
     },
     'carmax-pricing': {
-      sources: 5,
-      tag: 'CARMAX / AI & VALUATION',
-      eyebrow: 'MEDIUM CONFIDENCE · CARMAX / AI & VALUATION',
+      tag: 'CarMax / AI & valuation',
+      eyebrow: 'Medium confidence · CarMax / AI & valuation',
       title: 'The next pricing advantage might be under the hood.',
       body: 'A cluster of hiring signals suggests renewed investment in real-time valuation.',
       then: 'Valuation was presented as a single-point estimate.',
@@ -96,7 +101,11 @@
         ]
       },
       evidence: [
-        { icon:'💼', type:'Job posting', title:'CarMax Careers — Real-Time Pricing roles', date:'Sep 29, 2026', url:'https://www.carmax.com/careers' }
+        { icon:'💼', type:'Job posting', title:'CarMax Careers — Real-Time Pricing roles', date:'Sep 29, 2026', url:'https://www.carmax.com/careers' },
+        { icon:'💼', type:'Job posting', title:'CarMax Careers — Inventory Valuation Data Scientist', date:'Sep 30, 2026', url:'https://www.carmax.com/careers' },
+        { icon:'🖥️', type:'Competitor site', title:'CarMax.com — appraisal flow observation', date:'Oct 3, 2026', url:'https://www.carmax.com' },
+        { icon:'📰', type:'Earnings & 10-K', title:'CarMax investor call — pricing technology remarks', date:'Sep 25, 2026', url:'https://www.carmax.com' },
+        { icon:'💬', type:'Dealer forum', title:'DealerRefresh thread — CarMax pricing changes', date:'Sep 27, 2026', url:'https://www.carmax.com' }
       ],
       followups: [
         'How many pricing-related roles has CarMax posted this quarter?',
@@ -105,9 +114,8 @@
       ]
     },
     'carscom-tradein': {
-      sources: 2,
-      tag: 'CARS.COM / TRADE-IN',
-      eyebrow: 'HIGH CONFIDENCE · CARS.COM / TRADE-IN',
+      tag: 'Cars.com / Trade-in',
+      eyebrow: 'High confidence · Cars.com / Trade-in',
       title: 'Trade-in moves closer to the shopping journey.',
       body: 'An updated entry point puts vehicle valuation earlier in the path to purchase.',
       then: 'Trade-in valuation sat in a separate tool.',
@@ -123,7 +131,8 @@
         ]
       },
       evidence: [
-        { icon:'🖥️', type:'Competitor site', title:'Cars.com — trade-in entry point', date:'Oct 6, 2026', url:'https://www.cars.com' }
+        { icon:'🖥️', type:'Competitor site', title:'Cars.com — trade-in entry point', date:'Oct 6, 2026', url:'https://www.cars.com' },
+        { icon:'📰', type:'Press & news', title:'Trade press — Cars.com trade-in placement', date:'Oct 5, 2026', url:'https://www.cars.com' }
       ],
       followups: [
         'Do other competitors offer trade-in this early in the journey?',
@@ -132,9 +141,8 @@
       ]
     },
     'carvana-financing': {
-      sources: 2,
-      tag: 'CARVANA / FINANCING',
-      eyebrow: 'HIGH CONFIDENCE · CARVANA / FINANCING',
+      tag: 'Carvana / Financing',
+      eyebrow: 'High confidence · Carvana / Financing',
       title: 'Financing gets a little less fragmented.',
       body: 'A simplified prequalification flow reduces the handoffs between browsing and buying.',
       then: 'Financing options appeared late in the purchase sequence.',
@@ -150,7 +158,8 @@
         ]
       },
       evidence: [
-        { icon:'🖥️', type:'Competitor site', title:'Carvana — prequalification flow', date:'Oct 3, 2026', url:'https://www.carvana.com' }
+        { icon:'🖥️', type:'Competitor site', title:'Carvana — prequalification flow', date:'Oct 3, 2026', url:'https://www.carvana.com' },
+        { icon:'💼', type:'Job posting', title:'Carvana Careers — Inventory Systems PM', date:'Oct 1, 2026', url:'https://www.carvana.com/careers' }
       ],
       followups: [
         'What does Carvana’s hiring tell us about this?',
@@ -174,10 +183,31 @@
     document.getElementById('mThen').textContent = s.then;
     document.getElementById('mNow').textContent = s.now;
     document.getElementById('mWhy').textContent = s.why;
+    var sourcesEl = document.getElementById('mSources');
+    if(sourcesEl){
+      var evidence = s.evidence || [];
+      sourcesEl.innerHTML = evidence.map(function(e){
+        return '<div class="evidence-card"><span class="ev-icon">'+e.icon+'</span>'+
+          '<div class="ev-body"><div class="ev-title">'+e.title+'</div><div class="ev-meta">'+e.type+' · '+e.date+'</div></div>'+
+          '<a class="ev-link" href="'+e.url+'" target="_blank" rel="noopener" title="Open source" aria-label="Open source">↗</a></div>';
+      }).join('');
+    }
     overlay.classList.add('open');
   }
   document.querySelectorAll('[data-story]').forEach(function(el){
     el.addEventListener('click', function(){ openStory(this.getAttribute('data-story')); });
+  });
+
+  // Single source of truth for "N sources": derive the homepage card's count
+  // from the same evidence array the chat drawer and story modal use, so the
+  // two can't drift out of sync again.
+  document.querySelectorAll('.insight-card[data-story]').forEach(function(card){
+    var s = stories[card.getAttribute('data-story')];
+    var ct = card.querySelector('.sources-ct');
+    if(s && ct){
+      var n = (s.evidence || []).length;
+      ct.textContent = '🔗 ' + n + ' source' + (n === 1 ? '' : 's');
+    }
   });
   if(overlay){
     document.getElementById('storyClose').addEventListener('click', function(){ overlay.classList.remove('open'); });
@@ -200,6 +230,22 @@
     });
   }
 
+  // ===== GET ALERTS MODAL =====
+  var alertsOverlay = document.getElementById('alertsOverlay');
+  document.querySelectorAll('[data-open-alerts]').forEach(function(btn){
+    btn.addEventListener('click', function(){ if(alertsOverlay) alertsOverlay.classList.add('open'); });
+  });
+  if(alertsOverlay){
+    document.getElementById('alertsClose').addEventListener('click', function(){ alertsOverlay.classList.remove('open'); });
+    alertsOverlay.addEventListener('click', function(e){ if(e.target === alertsOverlay) alertsOverlay.classList.remove('open'); });
+    var alertsForm = document.getElementById('alertsForm');
+    if(alertsForm) alertsForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      document.getElementById('alertsConfirm').style.display = 'block';
+      this.reset();
+    });
+  }
+
   // ===== ASK THE DESK / CHAT DRAWER (docked, with a real message transcript) =====
   var chatSidebar = document.getElementById('chatSidebar');
   var chatPill = document.getElementById('chatPill');
@@ -217,8 +263,7 @@
       'CarMax and Carvana both already have one; AutoTrader doesn’t yet match them here.'
     ]},
     { k:['changed with carmax','carmax this month','change with carmax'], trust:'inferred', lead:'The clearest change this month is hiring, not a shipped feature.', bullets:[
-      'CarMax has posted multiple roles tied to real-time, inventory-level pricing in the last 40 days.',
-      'See "Hiring themes" below for the full pattern.'
+      'CarMax has posted multiple roles tied to real-time, inventory-level pricing in the last 40 days.'
     ]},
     { k:['dealer-side sourcing','dealer side sourcing'], trust:'inferred', lead:'AutoTrader is the one competitor actively building this.', bullets:[
       'A dedicated acquisition workflow connects sourcing, valuation, and dealer inventory into one flow.',
@@ -234,8 +279,7 @@
     ]},
     { k:['carvana hiring',"carvana's hiring"], trust:'inferred', lead:'Carvana’s hiring points to an end-to-end play, not just a checkout tweak.', bullets:[
       'Financing-prequalification work pairs with inventory- and supply-chain-themed roles.',
-      'Read together, that looks like investment across the full acquisition-to-resale path.',
-      'See "Hiring themes" below for the specific roles.'
+      'Read together, that looks like investment across the full acquisition-to-resale path.'
     ]},
     { k:['how many products','products launched'], trust:'verified', lead:'CarMax has shipped the most this year.', bullets:[
       'Its product-launch pace has accelerated every quarter — the steepest curve of any competitor we track.',
@@ -523,6 +567,26 @@
   document.querySelectorAll('.chat-chip').forEach(function(c){
     c.addEventListener('click', function(e){ e.stopPropagation(); openChatSidebar(this.getAttribute('data-q')); });
   });
+
+  // Ask the desk hero search field: a real input — Enter or the magnifying
+  // glass submits the typed text as the opening question.
+  var teaserSearchInput = document.getElementById('teaserSearchInput');
+  var teaserSearchBtn = document.getElementById('teaserSearchBtn');
+  function submitTeaserSearch(){
+    var val = (teaserSearchInput.value || '').trim();
+    if(!val) return;
+    openChatSidebar(val);
+    teaserSearchInput.value = '';
+  }
+  if(teaserSearchInput){
+    teaserSearchInput.addEventListener('click', function(e){ e.stopPropagation(); });
+    teaserSearchInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.stopPropagation(); submitTeaserSearch(); }
+    });
+  }
+  if(teaserSearchBtn){
+    teaserSearchBtn.addEventListener('click', function(e){ e.stopPropagation(); submitTeaserSearch(); });
+  }
   document.querySelectorAll('.tell-me-more').forEach(function(el){
     el.addEventListener('click', function(e){
       e.stopPropagation(); e.preventDefault();
@@ -536,6 +600,63 @@
     chatSendBtn.addEventListener('click', function(){ sendMessage(chatSearchInput.value); chatSearchInput.value = ''; });
     chatSearchInput.addEventListener('keydown', function(e){
       if(e.key === 'Enter'){ sendMessage(this.value); this.value = ''; }
+    });
+  }
+
+  // ===== LATEST COMPETITOR & INDUSTRY NEWS (tabbed, grouped by competitor) =====
+  var newsFeed = document.getElementById('newsFeed');
+  if(newsFeed){
+    var newsItems = [
+      { comp:'Cars.com', headline:'A more conversational way to find the next car.', confidence:'medium', date:'Oct 7, 2026', topic:'A more conversational way to find the next car', cat:'product' },
+      { comp:'Cars.com', headline:'AI Search Prioritization for Premium+ Listings', confidence:'high', date:'Oct 1, 2026', topic:'AI Search Prioritization for Premium+ Listings', cat:'product' },
+      { comp:'Cars.com', headline:'Trade-in moves closer to the shopping journey.', confidence:'high', date:'Oct 6, 2026', topic:'Trade-in moves closer to the shopping journey', cat:'product' },
+      { comp:'CarMax', headline:'The next pricing advantage might be under the hood.', confidence:'medium', date:'Oct 7, 2026', topic:'The next pricing advantage might be under the hood', cat:'product' },
+      { comp:'Carvana', headline:'Financing gets a little less fragmented.', confidence:'high', date:'Oct 3, 2026', topic:'Financing gets a little less fragmented', cat:'product' },
+      { comp:'Carvana', headline:'Adds inspection and reconditioning capabilities to ADESA Orlando', confidence:'high', date:'Oct 6, 2026', topic:'Adds inspection and reconditioning capabilities to ADESA Orlando', cat:'product' },
+      { comp:'AutoTrader', headline:'AutoTrader is moving deeper into dealer sourcing.', confidence:'high', date:'Oct 7, 2026', topic:'AutoTrader is moving deeper into dealer sourcing', cat:'product' }
+    ];
+    function renderNewsFeed(cat){
+      var filtered = newsItems.filter(function(x){ return cat === 'all' || x.cat === cat; });
+      if(!filtered.length){
+        newsFeed.innerHTML = '<p class="news-empty">Nothing here yet.</p>';
+        return;
+      }
+      var groups = [];
+      filtered.forEach(function(item){
+        var g = groups.filter(function(x){ return x.comp === item.comp; })[0];
+        if(!g){ g = { comp:item.comp, items:[] }; groups.push(g); }
+        g.items.push(item);
+      });
+      // One shared header for the whole listing (not repeated per competitor) —
+      // competitor names render as plain subhead rows inside the same table
+      // body, so the What changed/Confidence/Date columns stay aligned.
+      var rows = groups.map(function(g){
+        var subhead = '<tr class="news-group-row"><td colspan="4" class="news-group-name">'+g.comp+'</td></tr>';
+        var items = g.items.map(function(it){
+          var label = it.confidence.charAt(0).toUpperCase() + it.confidence.slice(1);
+          return '<tr><td class="col-headline clickable" data-topic="'+it.topic+'">'+it.headline+'</td>'+
+            '<td class="col-badge"><span class="badge conf-'+it.confidence+'">'+label+'</span></td>'+
+            '<td class="col-time">'+it.date+'</td>'+
+            '<td class="col-action"><span class="link-arrow tell-me-more" data-topic="'+it.topic+'">Tell me more →</span></td></tr>';
+        }).join('');
+        return subhead + items;
+      }).join('');
+      newsFeed.innerHTML = '<table class="feed-table news-feed-table">'+
+        '<thead><tr><th>What changed</th><th>Confidence</th><th>Date</th><th></th></tr></thead>'+
+        '<tbody>'+rows+'</tbody></table>';
+      newsFeed.querySelectorAll('.tell-me-more').forEach(function(el){
+        el.addEventListener('click', function(e){
+          e.stopPropagation(); e.preventDefault();
+          askAboutTopic(this.getAttribute('data-topic'));
+        });
+      });
+      newsFeed.querySelectorAll('.col-headline.clickable').forEach(function(el){
+        el.addEventListener('click', function(){ askAboutTopic(this.getAttribute('data-topic')); });
+      });
+    }
+    renderNewsFeed('product');
+    document.querySelectorAll('#newsFilter .pill').forEach(function(btn){
+      btn.addEventListener('click', function(){ renderNewsFeed(this.getAttribute('data-cat')); });
     });
   }
 
@@ -567,33 +688,83 @@
     });
   });
 
-  // ===== TRENDING TOPICS (slow marquee, duplicated for seamless loop) =====
+  // ===== TRENDING TOPICS (auto-drifting, user-scrollable carousel) =====
   var topicsRow = document.getElementById('topicsRow');
+  var topicsRowWrap = document.getElementById('topicsRowWrap');
   if(topicsRow){
     var topics = [
-      {t:'Dealer sourcing', cat:'dealer'},
-      {t:'AI-powered valuation', cat:'both'},
-      {t:'Conversational shopping', cat:'consumer'},
-      {t:'Financing prequalification', cat:'consumer'},
-      {t:'Trade-in experience', cat:'consumer'},
-      {t:'Lead management', cat:'dealer'},
-      {t:'Inventory intelligence', cat:'dealer'},
-      {t:'Payment calculator', cat:'consumer'},
-      {t:'Acquisition workflows', cat:'dealer'},
-      {t:'Real-time pricing models', cat:'both'}
+      {t:'Growth of CARFAX', cat:'both'},
+      {t:'Balance of digital retail and physical retail', cat:'dealer'},
+      {t:'Sourcing', cat:'dealer'},
+      {t:'Consumer transparency', cat:'consumer'},
+      {t:'Integrated dealer workflows', cat:'dealer'},
+      {t:'Lead quality', cat:'dealer'},
+      {t:'Agentic car shopping', cat:'consumer'},
+      {t:'Amazon Autos', cat:'both'}
     ];
     function renderTopics(cat){
       var filtered = topics.filter(function(x){ return cat === 'all' || x.cat === cat || x.cat === 'both'; });
       var pills = filtered.map(function(x){ return '<span class="topic-pill" data-topic="'+x.t+'">'+x.t+'</span>'; }).join('');
+      // Duplicated so the auto-drift can loop seamlessly (reset lands on an
+      // identical copy, so the wrap-around is invisible) while still being
+      // a real scrollable element the arrows and hover-pause can control.
       topicsRow.innerHTML = pills + pills;
       topicsRow.querySelectorAll('.topic-pill').forEach(function(p){
         p.addEventListener('click', function(){ askAboutTopic(this.getAttribute('data-topic')); });
       });
+      if(topicsRowWrap) topicsRowWrap.scrollLeft = 0;
     }
     renderTopics('all');
     document.querySelectorAll('#topicsFilter .pill').forEach(function(btn){
       btn.addEventListener('click', function(){ renderTopics(this.getAttribute('data-cat')); });
     });
+
+    // Slow auto-drift to the right, pausing on hover/interaction; wraps back to
+    // the start once it reaches the end. Arrows give the user manual control
+    // on top of that (and also pause the drift while in use).
+    if(topicsRowWrap){
+      var topicsPaused = false;
+      var topicsResumeTimer = null;
+      function pauseTopicsDrift(){
+        topicsPaused = true;
+        clearTimeout(topicsResumeTimer);
+        topicsResumeTimer = setTimeout(function(){ topicsPaused = false; }, 5000);
+      }
+      topicsRowWrap.addEventListener('mouseenter', function(){ topicsPaused = true; });
+      topicsRowWrap.addEventListener('mouseleave', function(){ clearTimeout(topicsResumeTimer); topicsPaused = false; });
+      (function drift(){
+        if(!topicsPaused){
+          var half = topicsRowWrap.scrollWidth / 2;
+          topicsRowWrap.scrollLeft += 0.12;
+          if(topicsRowWrap.scrollLeft >= half) topicsRowWrap.scrollLeft -= half;
+        }
+        requestAnimationFrame(drift);
+      })();
+      var arrowLeft = document.getElementById('topicsArrowLeft');
+      var arrowRight = document.getElementById('topicsArrowRight');
+      if(arrowLeft) arrowLeft.addEventListener('click', function(){ pauseTopicsDrift(); topicsRowWrap.scrollBy({ left:-220, behavior:'smooth' }); });
+      if(arrowRight) arrowRight.addEventListener('click', function(){ pauseTopicsDrift(); topicsRowWrap.scrollBy({ left:220, behavior:'smooth' }); });
+    }
+  }
+
+  // Shared site-wide data-viz palette (fixed set — don't introduce colors outside this list).
+  var chartPalette = ['var(--chart-1)','var(--chart-2)','var(--chart-3)','var(--chart-4)','var(--chart-5)','var(--chart-6)','var(--chart-7)','var(--chart-8)','var(--chart-9)','var(--chart-10)','var(--chart-11)','var(--chart-12)'];
+
+  function renderGroupedBarChart(containerId, legendId, series, categories){
+    var el = document.getElementById(containerId);
+    if(!el) return;
+    var max = Math.max.apply(null, series.map(function(c){ return Math.max.apply(null, c.data); }));
+    el.innerHTML = categories.map(function(cat, i){
+      var bars = series.map(function(c){
+        var h = Math.round((c.data[i] / max) * 100);
+        return '<div class="launch-bar" style="height:'+Math.max(h,5)+'%; background:'+c.color+';" title="'+c.n+': '+c.data[i]+'"></div>';
+      }).join('');
+      return '<div class="launch-group"><div class="launch-bars">'+bars+'</div><div class="launch-qlabel">'+cat+'</div></div>';
+    }).join('');
+    var legendEl = document.getElementById(legendId);
+    if(legendEl) legendEl.innerHTML = series.map(function(c){
+      return '<div class="legend-item"><span class="legend-dot" style="background:'+c.color+';"></span>'+c.n+'</div>';
+    }).join('');
   }
 
   // ===== BY THE NUMBERS: dealer rank by competitor =====
@@ -603,37 +774,28 @@
     var maxRank = Math.max.apply(null, rankData.map(function(d){ return d.rank; }));
     barsEl.innerHTML = rankData.map(function(d){
       var h = Math.round(((maxRank - d.rank + 1) / maxRank) * 100);
-      return '<div class="bar-col"><div class="bar" style="height:'+h+'%"><span class="val">#'+d.rank+'</span></div><div class="bar-label">'+d.m+'</div></div>';
+      return '<div class="bar-col"><div class="bar" style="height:'+h+'%; background:'+chartPalette[9]+';"><span class="val">#'+d.rank+'</span></div><div class="bar-label">'+d.m+'</div></div>';
     }).join('');
   }
 
   // ===== BY THE NUMBERS: launches-per-quarter grouped bar chart =====
-  var launchEl = document.getElementById('launchChart');
-  if(launchEl){
-    var launchCompetitors = [
-      {n:'CarMax', color:'var(--blue)', data:[1,2,3,4]},
-      {n:'Carvana', color:'var(--amber)', data:[1,1,2,3]},
-      {n:'AutoTrader', color:'var(--ink)', data:[0,1,1,2]},
-      {n:'Cars.com', color:'var(--muted)', data:[1,1,1,2]}
-    ];
-    var quarters = ['Q1','Q2','Q3','Q4'];
-    var launchMax = Math.max.apply(null, launchCompetitors.map(function(c){ return Math.max.apply(null, c.data); }));
-    launchEl.innerHTML = quarters.map(function(q, qi){
-      var bars = launchCompetitors.map(function(c){
-        var h = Math.round((c.data[qi] / launchMax) * 100);
-        return '<div class="launch-bar" style="height:'+Math.max(h,5)+'%; background:'+c.color+';" title="'+c.n+': '+c.data[qi]+'"></div>';
-      }).join('');
-      return '<div class="launch-group"><div class="launch-bars">'+bars+'</div><div class="launch-qlabel">'+q+'</div></div>';
-    }).join('');
-    document.getElementById('launchLegend').innerHTML = launchCompetitors.map(function(c){
-      return '<div class="legend-item"><span class="legend-dot" style="background:'+c.color+';"></span>'+c.n+'</div>';
-    }).join('');
-  }
+  renderGroupedBarChart('launchChart', 'launchLegend', [
+    {n:'CarMax', color:chartPalette[0], data:[1,2,3,4]},
+    {n:'Carvana', color:chartPalette[1], data:[1,1,2,3]},
+    {n:'AutoTrader', color:chartPalette[6], data:[0,1,1,2]},
+    {n:'Cars.com', color:chartPalette[8], data:[1,1,1,2]}
+  ], ['Q1','Q2','Q3','Q4']);
+
+  // ===== BY THE NUMBERS: app data (placeholder — real data coming soon) =====
+  renderGroupedBarChart('appDataChart', 'appDataLegend', [
+    {n:'iOS', color:chartPalette[4], data:[3,4,5,6]},
+    {n:'Android', color:chartPalette[7], data:[2,3,4,5]}
+  ], ['Q1','Q2','Q3','Q4']);
 
   // ===== SCROLL REVEAL (subtle fade-in as sections/cards enter the viewport) =====
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var revealTargets = document.querySelectorAll(
-    '.wrap > section, .wrap > .chat-teaser, .wrap > .util-strip, .insight-card, .hire-card, .glossary-card, .chart-card'
+    '.wrap > section, .wrap > .chat-teaser, .wrap > .util-strip, .insight-card, .glossary-card, .chart-card'
   );
   if(!reduceMotion && 'IntersectionObserver' in window && revealTargets.length){
     revealTargets.forEach(function(el){ el.classList.add('reveal'); });
